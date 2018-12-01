@@ -1,0 +1,126 @@
+actor CPosAttack2 : MonsterWeapon
+{
+  obituary "%o was perforated by %k."
+  states
+  {
+  Ready:
+    CHGG A 1 A_WeaponReady
+    Loop
+  Deselect:
+    CHGG A 1 A_Lower
+    Loop
+  Select:
+    CHGG A 0 A_Raise // Additional A_Raises are needed for a quicker recovery from a pain state (matches that of normal monsters).
+    CHGG A 0 A_Raise
+    CHGG A 0 A_Raise
+    CHGG A 0 A_Raise
+    CHGG A 1 A_Raise
+    Loop
+  Fire:
+    CHGG A 10
+    CHGG A 0 A_ReFire
+  Hold:
+    CHGG A 0 A_PlaySound("chainguy/attack", CHAN_WEAPON)
+    CHGG A 4 A_FireBullets (22.5, 0, 3, random(1,5)*3, "BulletPuff", FBF_NORANDOM, 0)
+    CHGG A 0 A_GunFlash
+    CHGG A 0 A_PlaySound("chainguy/attack", CHAN_WEAPON)
+    CHGG B 4
+    CHGG B 0
+    CHGG B 0 A_ReFire
+    Goto Ready
+  Flash:
+    CHGF A 4 bright //A_Light1
+    CHGF B 5 bright //A_Light2
+    CHGF A 0 bright //A_Light0
+    stop
+  }
+}
+
+actor ChaingunGuyPlayer : PlayerMonster
+{
+
+  player.startitem "CPosAttack2"
+  player.displayname "Heavy Weapons Dude"
+  player.viewheight 48
+  health 70
+  radius 20
+  height 56
+  mass 100
+  speed 0.2
+  painchance 200
+  +FLOORCLIP
+  states
+  {
+  Spawn:
+	  CPOS A 0 A_JumpIf (tid == 1, 2) // TID 1 is the Demon team, TID 2 is the Marine team. Used for MVM.
+    CPOS A 0 Thing_ChangeTID(0, 1)
+    CPOS A 0 A_JumpIfInventory ("NoTargetAlreadySet", 1, 5)
+    CPOS A 0 A_ChangeFlag ("SHOOTABLE", 0)  // It's used so that monsters who saw you instantly spawn wouldn't target you.
+    CPOS A 0 SetPlayerProperty (0, 1, PROP_NOTARGET) // Monsters ignore the player monster. The player can still provoke them though, naturally.
+    CPOS A 0 A_ChangeFlag ("SHOOTABLE", 1)
+    CPOS A 0 A_GiveInventory("NoTargetAlreadySet", 1)
+    CPOS A 0 A_GiveInventory ("CPosAttack2") // Incase the map changed during the pain state, otherwise the weapon would be lost
+    CPOS A 0 A_SelectWeapon ("CPosAttack2")
+    CPOS AB 10
+    CPOS A 0 A_JumpIfTargetInLOS(1, 90, JLOSF_DEADNOJUMP, 0, 0)
+    Goto Spawn
+    CPOS A 0 A_CheckFlag("FRIENDLY", 1, AAPTR_PLAYER_GETTARGET) // Actors with the friendly flag in this case are actual enemies.
+    Goto Spawn
+    CPOS A 0 A_Jump (30, "PlaySightRoar") // If the player is looking at an enemy, roar at the enemy, but not all the time.
+    loop
+  See:
+	  CPOS A 0 A_JumpIf (tid == 1, 2) // TID 1 is the Demon team, TID 2 is the Marine team. Used for MVM.
+    CPOS A 0 Thing_ChangeTID(0, 1)
+    CPOS AABBCCDD 3
+    CPOS D 0 A_Jump (20, "PlayActiveRoar")
+    CPOS D 0 A_JumpIfTargetInLOS(1, 90, JLOSF_DEADNOJUMP, 0, 0)
+    Goto See
+    CPOS D 0 A_CheckFlag("FRIENDLY", 1, AAPTR_PLAYER_GETTARGET) // Jump if the target is has the friendly flag (an actual enemy in this case).
+    Goto See
+    CPOS D 0 A_Jump (30, "PlaySightRoar") // If the player is chasing an enemy, roar at the enemy, but not all the time.
+    loop
+  Missile:
+    CPOS A 0 SetPlayerProperty (0, 1, PROP_FROZEN) // Stops movement of the monster when he fires. This is to mimic a normal monster attack.
+    CPOS A 0 A_ScaleVelocity (0) // Stops the monster completely when the monster fires.
+//    CPOS E 10
+    CPOS FE 4 bright
+    CPOS F 1 bright
+    CPOS A 0 SetPlayerProperty (0, 0, PROP_FROZEN) // Monster can move again.
+    goto Spawn
+  Pain:
+    CPOS A 0 A_TakeInventory ("CPosAttack2", 1) // Take away weapon to stop the monster from firing while stunned
+    CPOS A 0 SetPlayerProperty (0, 0, PROP_FROZEN) // To ensure that the player can move after shooting if he is in pain while shooting.
+    CPOS G 3
+    CPOS G 3 A_PlaySound("chainguy/pain")
+    CPOS A 0 A_GiveInventory ("CPosAttack2", 1)
+    CPOS A 0 A_SelectWeapon ("CPosAttack2")
+    goto Spawn
+  Death:
+    CPOS A 0 A_SpawnItemEx ("Chaingun", 0, 0, 0, 0, 0, 8)
+    CPOS H 5
+    CPOS I 5 A_PlaySound("chainguy/death")
+    CPOS J 5 A_NoBlocking
+    CPOS KLM 5
+    CPOS N -1
+    stop
+  XDeath:
+    CPOS A 0 A_SpawnItemEx ("Chaingun", 0, 0, 0, 0, 0, 8)
+    CPOS O 5
+    CPOS P 5 A_XScream
+    CPOS Q 5 A_NoBlocking
+    CPOS RS 5
+    CPOS T -1
+    stop
+  Raise:
+    CPOS NMLKJIH 5
+    goto Spawn
+
+  PlayActiveRoar:
+    CPOS A 0 A_PlaySound("chainguy/active")
+    Goto See
+
+  PlaySightRoar:
+    CPOS A 0 A_PlaySound("chainguy/sight") // Rawr.
+    Goto Spawn
+  }
+}

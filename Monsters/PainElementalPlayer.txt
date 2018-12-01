@@ -1,0 +1,294 @@
+Actor PainAttack2AI : MonsterWeapon
+{
+  States
+  {
+  Ready:
+    TNT1 A 1 A_WeaponReady
+    TNT1 A 0 A_JumpIfTargetInLOS (1, 360, JLOSF_NOSIGHT|JLOSF_DEADNOJUMP, 800, 0) // If you see a target, continue to the next check
+    goto Ready
+    TNT1 A 0 A_CheckFlag("FRIENDLY", 2, AAPTR_PLAYER_GETTARGET)
+    TNT1 A 0 A_JumpIfInTargetLOS (1, 360, JLOSF_NOSIGHT|JLOSF_DEADNOJUMP, 800, 0)
+    goto Ready
+    TNT1 A 0 A_SetBlend ("99, 50, 0", .2, 5) // If theres an eligible target nearby, make the screen flash orange.
+    loop
+  Deselect:
+    TNT1 A 1 A_Lower
+    loop
+  Select:
+    TNT1 A 0 A_Raise
+    TNT1 A 0 A_Raise
+    TNT1 A 0 A_Raise
+    TNT1 A 0 A_Raise
+    TNT1 A 1 A_Raise
+    loop
+  Fire:
+    TNT1 A 14
+    TNT1 A 0 A_JumpIfTargetInLOS (1, 0, JLOSF_DEADNOJUMP, 800, 0) // If a monster is provoking you, or a player sees you, you may fire when ready.
+    goto Ready
+    TNT1 A 1 A_PainAttack ("LostSoul", 0, PAF_AIMFACING)
+    goto Ready
+
+
+
+  }
+}
+
+Actor PainElementalPlayerAITargeting : PlayerMonster
+{
+  Player.startitem "PainAttack2AI"
+  Player.displayname "Pain Elemental _AI Targeting_"
+  Player.viewheight 50
+  Player.SoundClass "pain2" // Custom sound classes used primarly for *usefail and *grunt.
+  Health 400
+  Radius 31
+  Height 56
+  Mass 400
+  Speed 0.2
+  Painchance 128
+
+
+  States
+  {
+  Spawn:
+	  PAIN A 0 A_JumpIf (tid == 1, 2) // TID 1 is the Demon team, TID 2 is the Marine team. Used for MVM.
+    PAIN A 0 Thing_ChangeTID(0, 1)
+    PAIN A 0 A_JumpIfInventory ("NoTargetAlreadySet", 1, 5)
+    PAIN A 0 A_ChangeFlag ("SHOOTABLE", 0)  // It's used so that monsters who saw you instantly spawn wouldn't target you.
+    PAIN A 0 SetPlayerProperty (0, 1, PROP_NOTARGET) // Monsters ignore the player monster. The player can still provoke them though, naturally.
+    PAIN A 0 A_ChangeFlag ("SHOOTABLE", 1)
+    PAIN A 0 A_GiveInventory("NoTargetAlreadySet", 1)
+    PAIN A 0 A_GiveInventory ("PainAttack2AI") // Incase the map changed during the pain state, otherwise the weapon would be lost
+    PAIN A 0 A_SelectWeapon ("PainAttack2AI")
+    PAIN A 0 SetPlayerProperty (0, 1, PROP_FLY) // Allows the monster to fly.
+    PAIN A 10
+    PAIN A 0 A_JumpIfTargetInLOS(2, 0, JLOSF_DEADNOJUMP, 896, 0) // If a target is in LOS, do an A_Look which will give the AI targeting a target. If not, forget the target. Will cause problems otherwise.
+    PAIN A 0 A_ClearTarget
+    Goto Spawn
+    PAIN A 0 A_LookEx("LOF_NOJUMP", 0, 0, 0, 0, 1) // Needed to get a target TO BRING ON THE PAIN. Avoid jumping to See state to play the sight roar.
+    PAIN A 0 A_JumpIfTargetInLOS(1, 90, JLOSF_DEADNOJUMP, 0, 0)
+    Goto Spawn
+    PAIN A 0 A_CheckFlag("FRIENDLY", 1, AAPTR_PLAYER_GETTARGET) // Actors with the friendly flag in this case are actual enemies.
+    Goto Spawn
+    PAIN A 0 A_Jump (30, "PlaySightRoar") // If the player is looking at an enemy, roar at the enemy, but not all the time.
+    loop
+  See:
+	  PAIN A 0 A_JumpIf (tid == 1, 2) // TID 1 is the Demon team, TID 2 is the Marine team. Used for MVM.
+    PAIN A 0 Thing_ChangeTID(0, 1)
+    PAIN AABBCC 3
+    PAIN A 0 A_LookEx("LOF_NOJUMP", 0, 0, 0, 0, 1) // It's needed here for its monster targeting. Don't restart See state in order to play it's Active Roar.
+    PAIN D 0 A_Jump (20, "PlayActiveRoar")
+    PAIN D 0 A_JumpIfTargetInLOS(1, 90, JLOSF_DEADNOJUMP, 0, 0)
+    Goto See
+    PAIN D 0 A_CheckFlag("FRIENDLY", 1, AAPTR_PLAYER_GETTARGET) // Jump if the target is has the friendly flag (an actual enemy in this case).
+    Goto See
+    PAIN D 0 A_Jump (30, "PlaySightRoar") // If the player is chasing an enemy, roar at the enemy, but not all the time.
+    loop
+  Missile:
+    PAIN A 0 SetPlayerProperty (0, 1, PROP_FROZEN) // Stops movement of the monster when he fires. This is to mimic a normal monster attack.
+    PAIN A 0 A_ScaleVelocity (0) // Stops the monster completely when the monster fires.
+    PAIN DE 5
+    PAIN F 4 BRIGHT
+    PAIN F 1 BRIGHT
+    PAIN A 0 SetPlayerProperty (0, 0, PROP_FROZEN) // Monster can move again.
+    PAIN A 0 A_ClearTarget
+    PAIN A 0 A_Look // Regain a new target after firing.
+    goto Spawn
+  Pain:
+    PAIN A 0 A_TakeInventory ("PainAttack2AI", 1) // Take away weapon to stop the monster firing while stunned
+    PAIN A 0 SetPlayerProperty (0, 0, PROP_FROZEN) // To ensure that the player can move after shooting if he is in pain while shooting.
+    PAIN G 6
+    PAIN G 6 A_PlaySound("pain/pain")
+    PAIN A 0 A_GiveInventory ("PainAttack2AI", 1)
+    PAIN A 0 A_SelectWeapon ("PainAttack2AI")
+    goto Spawn
+  Death:
+    PAIN H 8 BRIGHT
+    PAIN I 8 BRIGHT A_PlayerScream
+    PAIN JK 8 BRIGHT
+    PAIN L 8 BRIGHT A_PainDie
+    PAIN M 8 BRIGHT
+    TNT1 A -1 A_ChangeFlag("INVISIBLE",1)
+    Stop
+  Raise:
+    PAIN MLKJIH 8
+    goto Spawn
+
+  PlayActiveRoar:
+    PAIN A 0 A_PlaySound("pain/active")
+    Goto See
+
+  PlaySightRoar:
+    PAIN A 0 A_PlaySound("pain/sight") // Roars when player finds a target
+    Goto Spawn
+  }
+}
+
+actor PainAttack2 : Weapon
+{
+  weapon.ammotype "none"
+  weapon.ammogive 0
+  weapon.ammouse 0
+  weapon.selectionorder 0
+  States
+  {
+  Ready:
+    TNT1 A 1 A_WeaponReady
+    loop
+  Deselect:
+    TNT1 A 1 A_Lower
+    loop
+  Select:
+    TNT1 A 0 A_Raise
+    TNT1 A 0 A_Raise
+    TNT1 A 0 A_Raise
+    TNT1 A 0 A_Raise
+    TNT1 A 1 A_Raise
+    loop
+  Fire:
+    TNT1 A 14
+    TNT1 A 0 A_JumpIfTargetInLOS (1, 360, JLOSF_NOSIGHT|JLOSF_DEADNOJUMP, 800, 0) // If you see a target, continue to the next check
+    goto Ready
+    TNT1 A 0 A_CheckFlag("PICKUP", 2, AAPTR_PLAYER_GETTARGET)
+    TNT1 A 0 A_JumpIfInTargetLOS (1, 360, JLOSF_NOSIGHT|JLOSF_DEADNOJUMP, 800, 0) // If the monster isn't attacking you, don't spawn a lost soul
+    goto Ready
+    TNT1 A 1 A_SpawnItemEx("SpawnedSoul",72,0,0,0,0,0,0)
+    goto Ready
+  }
+}
+
+actor SpawnedSoul : LostSoul
+{
+  +JUSTHIT // So that it attacks immediatley
+  +QUICKTORETALIATE
+  +LOOKALLAROUND
+  -NOICEDEATH
+  states {
+  Spawn:
+	  SKUL A 0 A_JumpIf (tid == 1, 3)
+    SKUL A 0 Thing_ChangeTID(0, 1)
+    SKUL A 0 Thing_Hate(1, 2, 2)
+    SKUL A 0 A_CheckFlag("NOICEDEATH", 1)
+    goto Missile
+    SKUL AB 10 A_Look
+    loop
+  See:
+	  SKUL A 0 A_JumpIf (tid == 1, 3)
+    SKUL A 0 Thing_ChangeTID(0, 1)
+    SKUL A 0 Thing_Hate(1, 2, 2)
+    SKUL AB 6 Bright A_Chase
+    Loop
+  Missile:
+    SKUL A 0 A_CheckFlag("NOICEDEATH", "NormalAttack") // This flag is used as a check to ensure that the first attack will be a "fast" attack rather than the normal delayed one.
+    SKUL A 0 A_ChangeFlag("NOICEDEATH",1)
+    SKUL C 1 Bright A_FaceTarget
+    SKUL D 4 Bright A_SkullAttack
+    SKUL CD 4 Bright
+    Goto Missile+4
+
+  NormalAttack:
+    SKUL C 10 Bright A_FaceTarget
+    SKUL D 4 Bright A_SkullAttack
+    SKUL CD 4 Bright
+    SKUL D 0 A_ChangeFlag("JUSTHIT",0) // Remove these flags so that it's basically a normal lost soul.
+    SKUL D 0 A_ChangeFlag("QUICKTORETALIATE",0)
+    Goto NormalAttack+2
+
+  Pain:
+    SKUL E 3 Bright
+    SKUL E 3 Bright A_Pain
+    Goto See
+  Death:
+    SKUL F 6 Bright
+    SKUL G 6 Bright A_Scream
+    SKUL H 6 Bright
+    SKUL I 6 Bright A_NoBlocking
+    SKUL J 6
+    SKUL K 6
+    Stop
+
+
+  }
+}
+
+Actor PainElementalPlayer : PlayerMonster
+{
+  Player.startitem "PainAttack2"
+  Player.displayname "Pain Elemental"
+  Player.viewheight 50
+  Player.SoundClass "pain2" // Custom sound classes used primarly for *usefail and *grunt.
+  Hitobituary "%o was eaten by %k."
+  Health 400
+  Radius 31
+  Height 56
+  Mass 400
+  Speed 0.26
+  Painchance 128
+
+  States
+  {
+  Spawn:
+	  PAIN A 0 A_JumpIf (tid == 1, 2) // TID 1 is the Demon team, TID 2 is the Marine team. Used for MVM.
+    PAIN A 0 Thing_ChangeTID(0, 1)
+    PAIN A 0 A_JumpIfInventory ("NoTargetAlreadySet", 1, 5)
+    PAIN A 0 A_ChangeFlag ("SHOOTABLE", 0)  // It's used so that monsters who saw you instantly spawn wouldn't target you.
+    PAIN A 0 SetPlayerProperty (0, 1, PROP_NOTARGET) // Monsters ignore the player monster. The player can still provoke them though, naturally.
+    PAIN A 0 A_ChangeFlag ("SHOOTABLE", 1)
+    PAIN A 0 A_GiveInventory("NoTargetAlreadySet", 1)
+    PAIN A 0 A_GiveInventory ("PainAttack2") // Incase the map changed during the pain state, otherwise the weapon would be lost
+    PAIN A 0 A_SelectWeapon ("PainAttack2")
+    PAIN A 0 SetPlayerProperty (0, 1, PROP_FLY) // Allows the monster to fly.
+    PAIN A 10
+    PAIN A 0 A_JumpIfTargetInLOS(1, 90, JLOSF_DEADNOJUMP, 0, 0)
+    Goto Spawn
+    PAIN A 0 A_CheckFlag("FRIENDLY", 1, AAPTR_PLAYER_GETTARGET) // Actors with the friendly flag in this case are actual enemies.
+    Goto Spawn
+    PAIN A 0 A_Jump (30, "PlaySightRoar") // If the player is looking at an enemy, roar at the enemy, but not all the time.
+    loop
+  See:
+	  PAIN A 0 A_JumpIf (tid == 1, 2) // TID 1 is the Demon team, TID 2 is the Marine team. Used for MVM.
+    PAIN A 0 Thing_ChangeTID(0, 1)
+    PAIN AABBCC 3
+    PAIN D 0 A_Jump (20, "PlayActiveRoar")
+    PAIN D 0 A_JumpIfTargetInLOS(1, 90, JLOSF_DEADNOJUMP, 0, 0)
+    Goto See
+    PAIN D 0 A_CheckFlag("FRIENDLY", 1, AAPTR_PLAYER_GETTARGET) // Jump if the target is has the friendly flag (an actual enemy in this case).
+    Goto See
+    PAIN D 0 A_Jump (30, "PlaySightRoar") // If the player is chasing an enemy, roar at the enemy, but not all the time.
+    loop
+  Missile:
+    PAIN A 0 SetPlayerProperty (0, 1, PROP_FROZEN) // Stops movement of the monster when he fires. This is to mimic a normal monster attack.
+    PAIN A 0 A_ScaleVelocity (0) // Stops the monster completely when the monster fires.
+    PAIN DE 5
+    PAIN F 4 BRIGHT
+    PAIN F 1 BRIGHT
+    PAIN A 0 SetPlayerProperty (0, 0, PROP_FROZEN) // Monster can move again.
+    goto Spawn
+  Pain:
+    PAIN A 0 A_TakeInventory ("PainAttack2", 1) // Take away weapon to stop the monster firing while stunned
+    PAIN A 0 SetPlayerProperty (0, 0, PROP_FROZEN) // To ensure that the player can move after shooting if he is in pain while shooting.
+    PAIN G 6
+    PAIN G 6 A_PlaySound("pain/pain")
+    PAIN A 0 A_GiveInventory ("PainAttack2", 1)
+    PAIN A 0 A_SelectWeapon ("PainAttack2")
+    goto Spawn
+  Death:
+    PAIN H 8 BRIGHT
+    PAIN I 8 BRIGHT A_PlayerScream
+    PAIN JK 8 BRIGHT
+    PAIN L 8 BRIGHT A_PainDie
+    PAIN M 8 BRIGHT
+    TNT1 A -1 A_ChangeFlag("INVISIBLE",1)
+    Stop
+  Raise:
+    PAIN MLKJIH 8
+    goto Spawn
+
+  PlayActiveRoar:
+    PAIN A 0 A_PlaySound("pain/active")
+    Goto See
+
+  PlaySightRoar:
+    PAIN A 0 A_PlaySound("pain/sight") // Roars when player finds a target
+    Goto Spawn
+  }
+}

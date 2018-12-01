@@ -1,0 +1,130 @@
+Actor BaronBall2 : MonsterWeapon
+{
+  obituary "%o was ripped open by %k."
+  States
+  {
+  Ready:
+    PUNG A 1 A_WeaponReady
+    loop
+  Deselect:
+    PUNG A 1 A_Lower
+    loop
+  Select:
+    PUNG A 0 A_Raise // Additional A_Raises are needed for a quicker recovery from a pain state (matches that of normal monsters).
+    PUNG A 0 A_Raise
+    PUNG A 0 A_Raise
+    PUNG A 0 A_Raise
+    PUNG A 1 A_Raise
+    loop
+  Fire:
+    PUNG B 8
+    PUNG C 8 A_JumpIfCloser(75,"MeleeAttack")
+    PUNG D 8 A_FireCustomMissile("BaronBall")
+    PUNG C 3
+    PUNG B 15 A_ReFire
+    goto Ready
+
+  MeleeAttack:
+    PUNG C 8
+    PUNG D 0 A_PlaySound("baron/melee")
+    PUNG D 8 A_CustomPunch(10)
+    PUNG C 4
+    PUNG B 15 A_ReFire
+    goto Ready
+
+  }
+}
+
+Actor BaronOfHellPlayer : PlayerMonster
+{
+  Player.Startitem "BaronBall2" // So that the player monster can shoot stuff.
+  Player.Displayname "Baron Of Hell" // Name shown on menu display.
+  Player.Viewheight 65
+  Obituary "%o was bruised by %k."
+  Health 1000
+  Radius 24
+  Height 64
+  Mass 1000
+  Speed 0.2 //8/4
+  Painchance 50
+  Player.DamageScreenColor green
+  BloodColor Green
+  DamageFactor "BaronFire", 0
+  Player.SoundClass "baron2" // Custom sound classes used primarly for *usefail and *grunt.
+  +DONTMORPH // It's kinda a boss, he shouldn't morph from a weapon or by anything else.
+  +FLOORCLIP
+
+
+  states
+  {
+
+  Spawn:
+	  BOSS A 0 A_JumpIf (tid == 1, 2) // TID 1 is the Demon team, TID 2 is the Marine team. Used for MVM.
+    BOSS A 0 Thing_ChangeTID(0, 1)
+    BOSS A 0 A_JumpIfInventory ("NoTargetAlreadySet", 1, 5)
+    BOSS A 0 A_ChangeFlag ("SHOOTABLE", 0)  // It's used so that monsters who saw you instantly spawn wouldn't target you.
+    BOSS A 0 SetPlayerProperty (0, 1, PROP_NOTARGET) // Monsters ignore the player monster. The player can still provoke them though, naturally.
+    BOSS A 0 A_ChangeFlag ("SHOOTABLE", 1)
+    BOSS A 0 A_GiveInventory("NoTargetAlreadySet", 1)
+    BOSS A 0 A_GiveInventory ("BaronBall2") // Incase the map changed during the pain state, otherwise the weapon would be lost
+    BOSS A 0 A_SelectWeapon ("BaronBall2")
+    BOSS AB 10
+    BOSS A 0 A_JumpIfTargetInLOS(1, 90, JLOSF_DEADNOJUMP, 0, 0)
+    Goto Spawn
+    BOSS A 0 A_CheckFlag("FRIENDLY", 1, AAPTR_PLAYER_GETTARGET) // Actors with the friendly flag in this case are actual enemies.
+    Goto Spawn
+    BOSS A 0 A_Jump (30, "PlaySightRoar") // If the player is looking at an enemy, roar at the enemy, but not all the time.
+    loop
+
+  See:
+	  BOSS A 0 A_JumpIf (tid == 1, 2) // TID 1 is the Demon team, TID 2 is the Marine team. Used for MVM.
+    BOSS A 0 Thing_ChangeTID(0, 1)
+    BOSS AABBCCDD 3
+    BOSS D 0 A_Jump (20, "PlayActiveRoar")
+    BOSS A 0 A_JumpIfTargetInLOS(1, 90, JLOSF_DEADNOJUMP, 0, 0)
+    Goto See
+    BOSS A 0 A_CheckFlag("FRIENDLY", 1, AAPTR_PLAYER_GETTARGET) // Jump if the target is has the friendly flag (an actual enemy in this case).
+    Goto See
+    BOSS A 0 A_Jump (30, "PlaySightRoar") // If the player is chasing an enemy, roar at the enemy, but not all the time.
+    loop
+
+  Missile:
+    BOSS A 0 SetPlayerProperty (0, 1, PROP_FROZEN) // Stops movement of the monster when he fires. This is to mimic a normal monster attack.
+    BOSS A 0 A_ScaleVelocity (0) // Stops the monster completely when the monster fires.
+    BOSS EF 8
+    BOSS G 8
+    BOSS A 0 SetPlayerProperty (0, 0, PROP_FROZEN) // Monster can move again.
+    goto Spawn
+
+  Pain:
+    BOSS A 0 A_TakeInventory ("BaronBall2", 1) // Take away weapon to stop the monster from firing while stunned
+    BOSS A 0 SetPlayerProperty (0, 0, PROP_FROZEN) // To ensure that the player can move after shooting if he is in pain while shooting.
+    BOSS H 2
+    BOSS H 2 A_PlaySound("baron/pain")
+    BOSS A 0 A_GiveInventory ("BaronBall2", 1)
+    BOSS A 0 A_SelectWeapon ("BaronBall2")
+    goto See
+
+  Death:
+    BOSS I 8
+    BOSS J 8 A_PlayerScream
+    BOSS K 8
+    BOSS L 8 A_NoBlocking
+    BOSS MN 8
+    BOSS O -1
+    stop
+
+ Raise:
+    BOSS ONMLKJI 8
+    goto See
+
+  PlayActiveRoar:
+    BOSS A 0 A_PlaySound("baron/active")
+    Goto See
+
+  PlaySightRoar:
+    BOSS A 0 A_PlaySound("baron/sight") // Rawr.
+    Goto Spawn
+  }
+}
+

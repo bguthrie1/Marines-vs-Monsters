@@ -1,0 +1,29 @@
+AddPlayerClass DemonHeroPlayer
+AddPlayerClass ZombiemanPlayer
+AddPlayerClass ShotgunGuyPlayer
+AddPlayerClass ChaingunGuyPlayer
+AddPlayerClass ImpPlayer
+AddPlayerClass DemonPlayer
+AddPlayerClass SpectrePlayer
+AddPlayerClass LostSoulPlayer
+AddPlayerClass CacodemonPlayer
+AddPlayerClass HellKnightPlayer
+AddPlayerClass BaronOfHellPlayer
+AddPlayerClass ArachPlayer
+AddPlayerClass PainElementalPlayer
+//AddPlayerClass PainElementalPlayerAITargeting
+AddPlayerClass RevenantPlayer
+AddPlayerClass MancubusPlayer
+AddPlayerClass ArchVilePlayer
+//AddPlayerClass ArchvilePlayerAITargeting
+AddPlayerClass SpiderMastermindPlayer
+AddPlayerClass CyberDemonPlayer
+AddPlayerClass IconOfSinPlayer
+AddPlayerClass WolfensteinSSPlayer
+
+
+
+
+
+
+

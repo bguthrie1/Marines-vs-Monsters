@@ -1,0 +1,396 @@
+actor InfraredMVM : Infrared replaces Infrared
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor RadSuitMVM : RadSuit replaces RadSuit
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor HealthBonusMVM : HealthBonus replaces HealthBonus
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor MedikitMVM : Medikit replaces Medikit
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor StimpackMVM : Stimpack replaces Stimpack
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor BerserkMVM : Berserk replaces Berserk
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor ArmorBonusMVM : ArmorBonus replaces ArmorBonus
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor BlueArmorMVM : BlueArmor replaces BlueArmor
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+ACTOR SoulsphereMVM : Megasphere
+{
+   Inventory.RestrictedTo  "PlayerMonster"
+   Inventory.PickupMessage "Soulsphere! Your skin hardens."
+
+  States
+  {
+  Spawn:
+    SOUL ABCDCB 6 Bright
+    Loop
+
+  Pickup:
+	 TNT1 A 0 A_GiveInventory("DemonHeal", 20)
+   TNT1 A 0 A_GiveInventory("GreenArmorForSoulsphereMVM", 1)
+   Stop
+  }
+}
+
+Actor PowersphereSpreadMVM : Megasphere
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Translation "128:143=112:127", "13:15=125:127", "144:151=125:127", "208:255=125:127"
+  Inventory.RestrictedTo  "DemonHeroPlayer"
+  Inventory.PickupMessage "Powersphere! You have gained a wide attack."
+
+   States
+    {
+    Pickup:
+    TNT1 A 0 A_GiveInventory ("BaronBallSpread")
+    Stop
+    }
+}
+
+Actor PowersphereRapidMVM : Megasphere
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Translation "128:143=112:127", "13:15=125:127", "144:151=125:127", "208:255=125:127"
+  Inventory.RestrictedTo  "DemonHeroPlayer"
+  Inventory.PickupMessage "Powersphere! You have gained a rapid attack."
+
+   States
+    {
+    Pickup:
+    TNT1 A 0 A_GiveInventory ("BaronBallRapid")
+    Stop
+    }
+}
+
+Actor PowersphereSnipeMVM : Megasphere
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Translation "128:143=112:127", "13:15=125:127", "144:151=125:127", "208:255=125:127"
+  Inventory.RestrictedTo  "DemonHeroPlayer"
+  Inventory.PickupMessage "Powersphere! You have gained a long range attack."
+
+   States
+    {
+    Pickup:
+    TNT1 A 0 A_GiveInventory ("BaronBallSnipe")
+    Stop
+    }
+}
+
+Actor PowersphereChargedMVM : Megasphere
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Translation "128:143=112:127", "13:15=125:127", "144:151=125:127", "208:255=125:127"
+  Inventory.RestrictedTo  "DemonHeroPlayer"
+  Inventory.PickupMessage "Powersphere! You have gained a powerful attack. Avoid killing yourself for the sake of demonity."
+
+   States
+    {
+    Pickup:
+    TNT1 A 0 A_GiveInventory ("BaronBallCharged")
+    Stop
+    }
+}
+
+Actor PowersphereShieldMVM : Megasphere
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Translation "128:143=112:127", "13:15=125:127", "144:151=125:127", "208:255=125:127"
+  Inventory.RestrictedTo  "DemonHeroPlayer"
+  Inventory.PickupMessage "Powersphere! You have gained a powerful defensive shield. Beware that it will weaken you after use."
+
+   States
+    {
+    Pickup:
+    TNT1 A 0 A_GiveInventory ("BaronShieldMVM")
+    Stop
+    }
+}
+
+ACTOR MegasphereMVM : Megasphere
+{
+  Inventory.RestrictedTo  "PlayerMonster"
+  Inventory.PickupMessage "Megasphere! You have gained all of your abilities and your skin hardens beyond that of steel."
+  States
+  {
+  Pickup:
+	  TNT1 A 0 A_GiveInventory("BaronBallSpread", 1)
+		TNT1 A 0 A_GiveInventory("BaronBallRapid", 1)
+		TNT1 A 0 A_GiveInventory("BaronBallSnipe", 1)
+		TNT1 A 0 A_GiveInventory("BaronBallCharged", 1)
+		TNT1 A 0 A_GiveInventory("BaronShieldMVM", 1)
+	  TNT1 A 0 A_GiveInventory("DemonHeal", 50)
+    TNT1 A 0 A_GiveInventory("BlueArmorForMegasphereMVM", 1)
+    Stop
+  }
+}
+
+
+ACTOR BlueArmorForMegasphereMVM : BlueArmorForMegasphere
+{
+  Armor.SavePercent 80
+  Armor.SaveAmount 500
+}
+
+ACTOR GreenArmorForSoulsphereMVM : BlueArmorForMegasphere
+{
+  Inventory.Icon "ARM1A0"
+  Armor.SavePercent 40
+  Armor.SaveAmount 300
+}
+
+actor GreenArmorMVM : GreenArmor replaces GreenArmor
+{
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor CellMVM : Cell replaces Cell
+{
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor ClipMVM : Clip replaces Clip
+{
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor RocketAmmoMVM : RocketAmmo replaces RocketAmmo
+{
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor ShellMVM : Shell replaces Shell
+{
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor BackpackMVM : Backpack replaces Backpack
+{
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor ShellBoxMVM : ShellBox replaces ShellBox
+{
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor CellPackMVM : CellPack replaces CellPack
+{
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor RocketBoxMVM : RocketBox replaces RocketBox
+{
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor ClipBoxMVM : ClipBox replaces ClipBox
+{
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor ChainsawMVM : Chainsaw replaces Chainsaw
+{
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor BFG9000MVM : BFG9000 replaces BFG9000
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Inventory.ForbiddenTo "PlayerMonster"
+}
+
+actor ChaingunMVM : Chaingun replaces Chaingun
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Inventory.ForbiddenTo  "PlayerMonster"
+}
+
+actor PistolMVM : Pistol replaces Pistol
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Inventory.ForbiddenTo "PlayerMonster"
+}
+
+actor PlasmaRifleMVM : PlasmaRifle replaces PlasmaRifle
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Inventory.ForbiddenTo "PlayerMonster"
+}
+
+actor RocketLauncherMVM : RocketLauncher replaces RocketLauncher
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Inventory.ForbiddenTo "PlayerMonster"
+}
+
+actor ShotgunMVM : Shotgun replaces Shotgun
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Inventory.ForbiddenTo "PlayerMonster"
+}
+
+actor SuperShotgunMVM : SuperShotgun replaces SuperShotgun
+{
+  +INVENTORY.RESTRICTABSOLUTELY
+  Inventory.ForbiddenTo "PlayerMonster"
+}
+
+actor RedCardMVM : CustomInventory
+{
+
+  Inventory.RestrictedTo  "PlayerMonster"
+  Inventory.PickupMessage "$GOTREDCARD"
+  Inventory.PickupSound "misc/p_pkup"
+
+  States
+  {
+  Spawn:
+    RKEY A 10
+    RKEY B 10 Bright
+    Loop
+
+  Pickup:
+    TNT1 A 1 A_GiveInventory ("RedCard", 1)
+    Stop
+
+  }
+
+}
+
+actor RedSkullMVM : CustomInventory
+{
+  Inventory.RestrictedTo  "PlayerMonster"
+  Inventory.PickupMessage "$GOTREDSKUL"
+  Inventory.PickupSound "misc/p_pkup"
+
+  States
+  {
+  Spawn:
+    RSKU A 10
+    RSKU B 10 Bright
+    Loop
+
+  Pickup:
+    TNT1 A 1 A_GiveInventory ("RedSkull", 1)
+    Stop
+
+  }
+
+}
+
+actor BlueCardMVM : CustomInventory
+{
+  Inventory.RestrictedTo  "PlayerMonster"
+  Inventory.PickupMessage "$GOTBLUECARD"
+  Inventory.PickupSound "misc/p_pkup"
+
+  States
+  {
+  Spawn:
+    BKEY A 10
+    BKEY B 10 Bright
+    Loop
+
+  Pickup:
+    TNT1 A 1 A_GiveInventory ("BlueCard", 1)
+    Stop
+
+  }
+
+}
+
+actor BlueSkullMVM : CustomInventory
+{
+  Inventory.RestrictedTo  "PlayerMonster"
+  Inventory.PickupMessage "$GOTBLUESKUL"
+  Inventory.PickupSound "misc/p_pkup"
+
+  States
+  {
+  Spawn:
+    BSKU A 10
+    BSKU B 10 Bright
+    Loop
+
+  Pickup:
+    TNT1 A 1 A_GiveInventory ("BlueSkull", 1)
+    Stop
+
+  }
+
+}
+
+actor YellowCardMVM : CustomInventory
+{
+  Inventory.RestrictedTo  "PlayerMonster"
+  Inventory.PickupMessage "$GOTYELWCARD"
+  Inventory.PickupSound "misc/p_pkup"
+
+  States
+  {
+  Spawn:
+    YKEY A 10
+    YKEY B 10 Bright
+    Loop
+
+  Pickup:
+    TNT1 A 1 A_GiveInventory ("YellowCard", 1)
+    Stop
+
+  }
+
+}
+
+actor YellowSkullMVM : CustomInventory
+{
+  Inventory.RestrictedTo  "PlayerMonster"
+  Inventory.PickupMessage "$GOTYELWSKUL"
+  Inventory.PickupSound "misc/p_pkup"
+
+  States
+  {
+  Spawn:
+    YSKU A 10
+    YSKU B 10 Bright
+    Loop
+
+  Pickup:
+    TNT1 A 1 A_GiveInventory ("YellowSkull", 1)
+    Stop
+
+  }
+
+}

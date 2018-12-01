@@ -1,0 +1,82 @@
+
+skill monstersvsmarines
+{
+	SpawnFilter = Hard
+	ACSReturn = 3
+	Key = "m"
+	TextColor = "Green"
+	MustConfirm = "This gameskill plays differently from the others and I recommend you have at least one Demon Hero with you. Are you sure?"
+	Name = "Marines vs Monsters"
+	PlayerClassName = "Marine", ""
+	ReplaceActor = "Fatso", "FMarineSSG"
+	ReplaceActor = "ZombieMan", "FMarinePistol"
+  ReplaceActor = "ShotgunGuy", "FMarineShotgun"
+  ReplaceActor = "Demon", "FMarineBerserk"
+  ReplaceActor = "DoomImp", "FMarineFire"
+  ReplaceActor = "Chaingunguy", "FMarineChaingun"
+  ReplaceActor = "Spectre", "FMarineChainsaw"
+  ReplaceActor = "Cyberdemon", "FMarineMultiRocket"
+  ReplaceActor = "Spidermastermind", "FMarineBFGWave"
+ 	ReplaceActor = "BaronOfHell", "FMarineBFG"
+	ReplaceActor = "HellKnight", "FMarinePlasma"
+ 	ReplaceActor = "Arachnotron", "FMarinePlasma"
+	ReplaceActor = "Revenant", "FMarineSeekerRocket"
+ 	ReplaceActor = "Archvile", "FMarineMedic"
+	ReplaceActor = "Cacodemon", "CacodemonMVM"
+	ReplaceActor = "PainElemental", "PainElementalMVM"
+	ReplaceActor = "LostSoul", "LostSoulMVM"
+	ReplaceActor = "Soulsphere", "SoulsphereMVM"
+	ReplaceActor = "Megasphere", "MegasphereMVM"
+	ReplaceActor = "RedCard", "RedCardMVM"
+	ReplaceActor = "RedSkull", "RedSkullMVM"
+	ReplaceActor = "BlueCard", "BlueCardMVM"
+	ReplaceActor = "BlueSkull", "BlueSkullMVM"
+	ReplaceActor = "YellowCard", "YellowCardMVM"
+	ReplaceActor = "YellowSkull", "YellowSkullMVM"
+	ReplaceActor = "BossBrain", "BossBrainMVM"
+	ReplaceActor = "BossEye", "BossEyeMVM"
+}
+
+skill monstersvsmarineseasymode
+{
+	SpawnFilter = easy
+	MonsterHealth = 0.1
+	EasyKey
+	ACSReturn = 1
+	Key = "m"
+	TextColor = "Green"
+	Name = "Marines vs Monsters (Easy)"
+	PlayerClassName = "Marine", ""
+	ReplaceActor = "Fatso", "FMarineSSG"
+	ReplaceActor = "ZombieMan", "FMarinePistol"
+  ReplaceActor = "ShotgunGuy", "FMarineShotgun"
+  ReplaceActor = "Demon", "FMarineBerserk"
+  ReplaceActor = "DoomImp", "FMarineFire"
+  ReplaceActor = "Chaingunguy", "FMarineChaingun"
+  ReplaceActor = "Spectre", "FMarineChainsaw"
+	ReplaceActor = "Cacodemon", "FMarineChaingun"
+	ReplaceActor = "PainElemental", "FMarineSSG"
+  ReplaceActor = "Cyberdemon", "FMarineMultiRocket"
+  ReplaceActor = "Spidermastermind", "FMarineBFGWave"
+ 	ReplaceActor = "BaronOfHell", "FMarineBFG"
+ 	ReplaceActor = "Arachnotron", "FMarinePlasma"
+	ReplaceActor = "Revenant", "FMarineSeekerRocket"
+ 	ReplaceActor = "Archvile", "FMarineMedic"
+	ReplaceActor = "Cacodemon", "CacodemonMVM"
+	ReplaceActor = "PainElemental", "PainElementalMVM"
+	ReplaceActor = "LostSoul", "LostSoulMVM"
+	ReplaceActor = "Soulsphere", "SoulsphereMVM"
+	ReplaceActor = "Megasphere", "MegasphereMVM"
+	ReplaceActor = "RedCard", "RedCardMVM"
+	ReplaceActor = "RedSkull", "RedSkullMVM"
+	ReplaceActor = "BlueCard", "BlueCardMVM"
+	ReplaceActor = "BlueSkull", "BlueSkullMVM"
+	ReplaceActor = "YellowCard", "YellowCardMVM"
+	ReplaceActor = "YellowSkull", "YellowSkullMVM"
+	ReplaceActor = "BossBrain", "BossBrainMVM"
+	ReplaceActor = "BossEye", "BossEyeMVM"
+}
+
+
+
+

@@ -1,0 +1,136 @@
+actor SuperChainGun : MonsterWeapon
+{
+  Obituary "%o stood in awe of %k."
+  AttackSound "spider/attack"
+   States
+   {
+   Ready:
+     CHGG A 1 A_WeaponReady
+     Loop
+   Deselect:
+     CHGG A 1 A_Lower
+     Loop
+   Select:
+     CHGG A 0 A_Raise
+     CHGG A 0 A_Raise
+     CHGG A 0 A_Raise
+     CHGG A 0 A_Raise
+     CHGG A 1 A_Raise
+     Loop
+
+   Fire:
+     CHGG A 20
+     CHGG A 0 A_ReFire
+   Hold:
+     CHGG A 4 A_FireBullets(22.5, 0, 3, random(1,5)*3, "BulletPuff", FBF_NORANDOM)
+     CHGG A 0 A_GunFlash
+     CHGG B 4 A_FireBullets(22.5, 0, 3, random(1,5)*3, "BulletPuff", FBF_NORANDOM)
+     CHGG B 1 A_ReFire
+     Goto Ready
+
+   Flash:
+    CHGF A 4 bright //A_Light1
+    CHGF B 5 bright //A_Light2
+    CHGF A 0 bright //A_Light0
+    stop
+
+   }
+}
+
+actor SpiderMastermindPlayer : PlayerMonster
+{
+
+  Health 3000
+  Radius 100
+  Height 100
+  Mass 1000
+  Speed 0.3
+  Painchance 40
+  Player.Viewheight 80
+  Player.Displayname "Spider Mastermind"
+  Player.Startitem "SuperChainGun"
+//  Player.GruntSpeed 1 //Cannot use in the current release of ZDoom.
+  Player.SoundClass "Spider2"
+  +BOSS
+  +FLOORCLIP
+  +NORADIUSDMG
+  +DONTMORPH
+  +FIXMAPTHINGPOS
+
+  states
+  {
+
+  Spawn:
+	  SPID A 0 A_JumpIf (tid == 1, 2) // TID 1 is the Demon team, TID 2 is the Marine team. Used for MVM.
+    SPID A 0 Thing_ChangeTID(0, 1)
+    SPID A 0 A_JumpIfInventory ("NoTargetAlreadySet", 1, 5)
+    SPID A 0 A_ChangeFlag ("SHOOTABLE", 0)  // It's used so that monsters who saw you instantly spawn wouldn't target you.
+    SPID A 0 SetPlayerProperty (0, 1, PROP_NOTARGET) // Monsters ignore the player monster. The player can still provoke them though, naturally.
+    SPID A 0 A_ChangeFlag ("SHOOTABLE", 1)
+    SPID A 0 A_GiveInventory("NoTargetAlreadySet", 1)
+    SPID A 0 A_GiveInventory ("SuperChainGun") // Incase the map changed during the pain state, otherwise the weapon would be lost
+    SPID A 0 A_SelectWeapon ("SuperChainGun")
+    SPID AB 10
+    SPID A 0 A_JumpIfTargetInLOS(1, 90, JLOSF_DEADNOJUMP, 0, 0)
+    Goto Spawn
+    SPID A 0 A_CheckFlag("FRIENDLY", 1, AAPTR_PLAYER_GETTARGET) // Actors with the friendly flag in this case are actual enemies.
+    Goto Spawn
+    SPID A 0 A_Jump (30, "PlaySightRoar") // If the player is looking at an enemy, roar at the enemy, but not all the time.
+    loop
+
+  See:
+	  SPID A 0 A_JumpIf (tid == 1, 2) // TID 1 is the Demon team, TID 2 is the Marine team. Used for MVM.
+    SPID A 0 Thing_ChangeTID(0, 1)
+    SPID A 3 A_PlaySound("spider/walk")
+    SPID ABB 3
+    SPID C 3 A_PlaySound("spider/walk")
+    SPID CDD 3
+    SPID E 3 A_PlaySound("spider/walk")
+    SPID EFF 3
+    SPID D 0 A_Jump (20, "PlayActiveRoar")
+    SPID D 0 A_JumpIfTargetInLOS(1, 90, JLOSF_DEADNOJUMP, 0, 0)
+    Goto See
+    SPID D 0 A_CheckFlag("FRIENDLY", 1, AAPTR_PLAYER_GETTARGET) // Jump if the target is has the friendly flag (an actual enemy in this case).
+    Goto See
+    SPID D 0 A_Jump (30, "PlaySightRoar") // If the player is chasing an enemy, roar at the enemy, but not all the time.
+    loop
+
+  Missile:
+    SPID A 0 SetPlayerProperty (0, 1, PROP_FROZEN)
+    SPID A 0 A_ScaleVelocity (0)
+    SPID A 20 Bright
+
+  Melee:
+    SPID G 4 bright
+    SPID H 5 bright
+    SPID A 0 SetPlayerProperty (0, 0, PROP_FROZEN)
+    Goto Spawn
+
+  Pain:
+    SPID A 0 A_TakeInventory ("SuperChainGun", 1) // Take away weapon to stop the monster firing while stunned
+    SPID A 0 SetPlayerProperty (0, 0, PROP_FROZEN) // To ensure that the player can move after shooting if he is in pain while shooting.
+    SPID I 3
+    SPID I 3 A_PlaySound("spider/pain")
+    SPID A 0 A_GiveInventory ("SuperChainGun", 1)
+    SPID A 0 A_SelectWeapon ("SuperChainGun")
+    goto Spawn
+  Death:
+
+    SPID J 20 A_PlaySound("spider/death", 4, 1.0, 0, ATTN_NONE) // Boss death sound is heard no matter where the player is.
+    SPID K 10 A_NoBlocking
+    SPID LMNOPQR 10
+    SPID S 30
+    SPID S -1
+    stop
+
+  PlayActiveRoar:
+    SPID A 0 A_PlaySound("spider/active")
+    Goto See
+
+  PlaySightRoar:
+    SPID A 0 A_PlaySound("spider/sight", 4, 1.0, 0, ATTN_NONE) // Bosses's have the loudest roars.
+    Goto Spawn
+
+  }
+}
+

@@ -1,0 +1,186 @@
+//Marine (MVM)
+
+$random marinemvm/active		{ misc/chat player/male/grunt1 }
+$random marinemvm/pain		{ player/male/pain25_1 grunt/pain }
+$random marinemvm/death		{ player/male/death1 grunt/death2 }
+
+//Imp
+
+$playersound imp2 male *pain100 DSPOPAIN
+$playersounddup imp2 male *pain75 *pain100
+$playersounddup imp2 male *pain50 *pain100
+$playersounddup imp2 male *pain25 *pain100
+$playersound imp2 male *death dsbgdth1
+$playersound imp2 male *wimpydeath dsbgdth2
+$playersound imp2 male *xdeath DSSLOP
+$playersound imp2 male *usefail DSBGACT
+$playersounddup imp2 male *grunt *pain100
+$playersounddup imp2 male *land *pain100
+
+//Pinky Demon
+
+$playersound demon2 male *pain100 DSDMPAIN
+$playersounddup demon2 male *pain75 *pain100
+$playersounddup demon2 male *pain50 *pain100
+$playersounddup demon2 male *pain25 *pain100
+$playersound demon2 male *death DSSGTDTH
+$playersound demon2 male *usefail DSDMACT
+$playersounddup demon2 male *grunt *pain100
+$playersounddup demon2 male *land *pain100
+
+//LostSoul
+
+$playersound skull2 male *pain100 DSDMPAIN
+$playersounddup skull2 male *pain75 *pain100
+$playersounddup skull2 male *pain50 *pain100
+$playersounddup skull2 male *pain25 *pain100
+$playersound skull2 male *death dsfirxpl
+$playersounddup skull2 male *xdeath *death
+$playersound skull2 male *usefail DSDMACT
+$playersounddup skull2 male *grunt *usefail
+$Playersounddup skull2 male *land *usefail
+
+
+//Cacodemon
+
+$playersound caco2 male *pain100 DSDMPAIN
+$playersounddup caco2 male *pain75 *pain100
+$playersounddup caco2 male *pain50 *pain100
+$playersounddup caco2 male *pain25 *pain100
+$playersound caco2 male *death DSCACDTH
+$playersound caco2 male *xdeath DSCACDTH
+$playersound caco2 male *usefail DSHOOF
+$playersounddup caco2 male *grunt *usefail
+$playersounddup caco2 male *land *usefail
+
+//Pain Elemental
+
+$playersound pain2 male *pain100 DSDMPAIN
+$playersounddup pain2 male *pain75 *pain100
+$playersounddup pain2 male *pain50 *pain100
+$playersounddup pain2 male *pain25 *pain100
+$playersound pain2 male *death DSPEDTH
+$playersound pain2 male *xdeath DSPEDTH
+$playersound pain2 male *usefail DSHOOF
+$playersounddup pain2 male *grunt *usefail
+$playersounddup pain2 male *land *usefail
+
+//Baron of Hell
+
+$playersound baron2 male *pain100 DSDMPAIN
+$playersounddup baron2 male *pain75 *pain100
+$playersounddup baron2 male *pain50 *pain100
+$playersounddup baron2 male *pain25 *pain100
+$playersound baron2 male *death DSBRSDTH
+$playersound baron2 male *xdeath DSBRSDTH
+$playersound baron2 male *usefail DSHOOF
+$playersounddup baron2 male *grunt *usefail
+$playersounddup baron2 male *land *usefail
+
+//Hell Knight
+
+$playersound knight2 male *pain100 DSDMPAIN
+$playersounddup knight2 male *pain75 *pain100
+$playersounddup knight2 male *pain50 *pain100
+$playersounddup knight2 male *pain25 *pain100
+$playersound knight2 male *death DSKNTDTH
+$playersound knight2 male *xdeath DSKNTDTH
+$playersound knight2 male *usefail DSHOOF
+$playersounddup knight2 male *grunt *usefail
+$playersounddup knight2 male *land *usefail
+
+//Archvile
+
+$playersound vile2 male *pain100 dsvipain
+$playersounddup vile2 male *pain75 *pain100
+$playersounddup vile2 male *pain50 *pain100
+$playersounddup vile2 male *pain25 *pain100
+$playersound vile2 male *death dsvildth
+$playersound vile2 male *xdeath dsvildth
+$playersound vile2 male *usefail dsflame
+$playersounddup vile2 male *grunt *usefail
+$playersounddup vile2 male *land *usefail
+
+//Cyberdemon
+
+$playersound cyber2 male *pain100 DSDMPAIN
+$playersounddup cyber2 male *pain75 *pain100
+$playersounddup cyber2 male *pain50 *pain100
+$playersounddup cyber2 male *pain25 *pain100
+$playersound cyber2 male *death DSCYBDTH
+$playersound cyber2 male *xdeath DSCYBDTH
+$playersound cyber2 male *usefail DSHOOF
+$playersounddup cyber2 male *grunt *usefail
+$playersounddup cyber2 male *land *usefail
+
+//Spider Mastermind
+
+$playersound spider2 male *pain100 DSDMPAIN
+$playersounddup spider2 male *pain75 *pain100
+$playersounddup spider2 male *pain50 *pain100
+$playersounddup spider2 male *pain25 *pain100
+$playersound spider2 male *death DSSPIDTH
+$playersound spider2 male *xdeath DSSPIDTH
+$playersound spider2 male *usefail DSHOOF
+$playersounddup spider2 male *grunt *usefail
+$playersounddup spider2 male *land *usefail
+
+//Arachnotron
+
+$playersound baby2 male *pain100 DSDMPAIN
+$playersounddup baby2 male *pain75 *pain100
+$playersounddup baby2 male *pain50 *pain100
+$playersounddup baby2 male *pain25 *pain100
+$playersound baby2 male *death dsbspdth
+$playersound baby2 male *xdeath dsbspdth
+$playersound baby2 male *usefail DSHOOF
+$playersounddup baby2 male *grunt *usefail
+$playersounddup baby2 male *land *usefail
+
+//Mancubus
+
+$playersound fatso2 male *pain100 dsmnpain
+$playersounddup fatso2 male *pain75 *pain100
+$playersounddup fatso2 male *pain50 *pain100
+$playersounddup fatso2 male *pain25 *pain100
+$playersound fatso2 male *death dsmandth
+$playersound fatso2 male *xdeath dsmandth
+$playersound fatso2 male *usefail DSHOOF
+$playersounddup fatso2 male *grunt *usefail
+$playersounddup fatso2 male *land *usefail
+
+//Demon
+
+$playersound demon2 male *pain100 dsdmpain
+$playersounddup demon2 male *pain75 *pain100
+$playersounddup demon2 male *pain50 *pain100
+$playersounddup demon2 male *pain25 *pain100
+$playersound demon2 male *death dssgtdth
+$playersound demon2 male *xdeath dssgtdth
+$playersound demon2 male *usefail DSHOOF
+$playersounddup demon2 male *grunt *usefail
+$playersounddup demon2 male *land *usefail
+
+//Revenant
+
+$playersound skeleton2 male *pain100 dspopain
+$playersounddup skeleton2 male *pain75 *pain100
+$playersounddup skeleton2 male *pain50 *pain100
+$playersounddup skeleton2 male *pain25 *pain100
+$playersound skeleton2 male *death dsskedth
+$playersound skeleton2 male *xdeath dsskedth
+$playersound skeleton2 male *usefail dsskepch
+$playersounddup skeleton2 male *grunt *usefail
+$playersounddup skeleton2 male *land *usefail
+
+// Wolfenstein SS
+
+$playersound wolfss2 male *pain100 dspopain
+$playersounddup wolfss2 male *pain75 *pain100
+$playersounddup wolfss2 male *pain50 *pain100
+$playersounddup wolfss2 male *pain25 *pain100
+$playersound wolfss2 male *death dsssdth
+$playersound wolfss2 male *xdeath dsssdth
+//$playersound wolfss2 male *usefail dsskepch
+//$playersounddup wolfss2 male *grunt *usefail
+//$playersounddup wolfss2 male *land *usefail

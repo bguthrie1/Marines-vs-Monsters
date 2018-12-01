@@ -1,0 +1,37 @@
+Actor PlayerMonster: PlayerPawn
+{
+  	Player.SideMove 0 // Prevent strafing
+  	Player.Face "STR" // Removes the "Doomguy" face.
+        DamageFactor "Slime", 0 // Prevents the player from getting hurt in slime
+        -FRIENDLY // Monsters aren't friendly creatures.
+//        -PICKUP // Monsters can't pick up things.
+        +NOSKIN
+	+ISMONSTER // So that actors with the "FRIENDLY" flag will attack the player.
+        +COUNTKILL // Death by another marine or friendly player counts towards their score
+	+ACTIVATEMCROSS
+//	-SLIDESONWALLS // Monsters can't wall slide, but it's too annoying for players to keep this flag.
+//	-NOBLOCKMONST // annoying and too limiting for players as well
+//	-TELESTOMP
+
+
+//	To convert monster speeds into player speeds, divide monster speed by 4 and move the decimal to the left.
+
+//	 Player.ColorRange 32, 47 // Allows players to change their monster color
+}
+
+
+Actor MonsterWeapon: Weapon
+{
+        Weapon.Ammotype "none"
+  	Weapon.Ammogive 0
+  	Weapon.Ammouse 0
+  	Weapon.Selectionorder 0
+  	Weapon.SlotNumber 0
+}
+
+actor NoTargetAlreadySet : Inventory
+{
+	Game Doom
+	Inventory.MaxAmount 1
+	Inventory.Amount 1
+}
